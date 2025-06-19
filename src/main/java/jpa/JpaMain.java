@@ -27,16 +27,22 @@ public class JpaMain {
             tx.begin();
 
             try {
-                // Member 엔티티 객체 생성
-                Member member = new Member();
-                // 식별자(PK) 설정
-                member.setId(1L);
-                // 이름 설정
-                member.setName("HelloA");
+//                // Member 엔티티 객체 생성
+//                Member member = new Member();
+//                // 식별자(PK) 설정
+//                member.setId(1L);
+//                // 이름 설정
+//                member.setName("HelloA");
+//
+//                // 영속성 컨텍스트에 엔티티 저장
+//                // 이 시점에서는 아직 데이터베이스에 저장되지 않음 (1차 캐시에 저장)
+//                em.persist(member);
 
-                // 영속성 컨텍스트에 엔티티 저장
-                // 이 시점에서는 아직 데이터베이스에 저장되지 않음 (1차 캐시에 저장)
-                em.persist(member);
+                // Member 엔티티 조회
+                Member findMember = em.find(Member.class, 1L);
+                // 조회된 엔티티의 이름을 변경
+                // 영속성 컨텍스트에 있는 엔티티는 자동으로 변경 감지(Dirty Checking) => persist 호출 필요 없음
+                findMember.setName("A");
 
                 // 트랜잭션 커밋
                 // 커밋 시점에 영속성 컨텍스트의 변경 내용이 데이터베이스에 반영됨 (flush)
