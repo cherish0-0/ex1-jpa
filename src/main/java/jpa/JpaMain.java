@@ -38,14 +38,24 @@ public class JpaMain {
 //                // 이 시점에서는 아직 데이터베이스에 저장되지 않음 (1차 캐시에 저장)
 //                em.persist(member);
 
-                // Member 엔티티 조회
-                Member findMember = em.find(Member.class, 1L);
-                // 조회된 엔티티의 이름을 변경
-                // 영속성 컨텍스트에 있는 엔티티는 자동으로 변경 감지(Dirty Checking) => persist 호출 필요 없음
-                findMember.setName("A");
+//                // Member 엔티티 조회
+//                Member findMember = em.find(Member.class, 1L);
+//                // 조회된 엔티티의 이름을 변경
+//                // 영속성 컨텍스트에 있는 엔티티는 자동으로 변경 감지(Dirty Checking) => persist 호출 필요 없음
+//                findMember.setName("A");
+
+                // 비영속 상태
+                Member member1 = new Member(150L, "A");
+                Member member2 = new Member(160L, "B");
+
+                // 영속 상태
+                // 1차 캐시에 저장 -> INSERT SQL 생성 -> 쓰기 지연 저장소에 축적
+                em.persist(member1);
+                em.persist(member2);
+
 
                 // 트랜잭션 커밋
-                // 커밋 시점에 영속성 컨텍스트의 변경 내용이 데이터베이스에 반영됨 (flush)
+                // 커밋 시점에 영속성 컨텍스트의 변경 내용이 데이터베이스에 반영됨 (flush -> 커밋)
                 tx.commit();
             } catch (Exception e) {
                 // 예외 발생 시 트랜잭션 롤백
