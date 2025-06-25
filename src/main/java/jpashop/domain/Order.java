@@ -31,7 +31,7 @@ import jakarta.persistence.Table;
 @Entity
 // DB에는 ORDER가 예약어이므로 ORDERS로 테이블 이름을 지정 (DB에 따라 ORDER가 될 때도 있음)
 @Table(name = "ORDERS")
-public class Order {
+public class Order extends BaseEntity {
 
 	/**
 	 * @Id : 엔티티의 기본 키임을 나타냄 (엔티티 식별하는 데 사용)

@@ -4,13 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.ManyToMany;
 
+/**
+ * @Inheritance : 상속 관계 매핑을 지정 (객체의 상속 구조와 DB의 슈퍼타입 서브타입 구조를 매핑)
+ *  - SINGLE_TABLE : 단일 테이블에 모든 엔티티를 저장, 하위 엔티티를 구분하기 위해 DTYPE(Discriminator Column) 필드를 사용
+ *  - JOINED : 각 엔티티마다 별도의 테이블을 생성하고, 상위 테이블에서 DTYPE 필드를 통해 구분
+ *  - TABLE_PER_CLASS : 각 엔티티마다 별도의 테이블을 생성하고, 상위 테이블은 사용하지 않음
+ * @DiscriminatorColumn : 상속 관계에서 하위 엔티티를 구분하기 위한 컬럼을 지정 (기본값: DTYPE)
+ */
 @Entity
-public class Item {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn
+public abstract class Item extends BaseEntity{
 
 	@Id @GeneratedValue
 	@Column(name = "ITEM_ID")
