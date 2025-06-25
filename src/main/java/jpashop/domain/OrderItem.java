@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class OrderItem {
@@ -12,9 +14,24 @@ public class OrderItem {
 	@Column(name = "ORDER_ITEM_ID")
 	private Long id;
 
-	private Long orderId;
+	// 외래 키 값을 직접 사용하고 있었음 (객체 지향적이지 않음)
+	// private Long orderId;
 
-	private Long itemId;
+	// private Long itemId;
+
+	/**
+	 * @ManyToOne : 다대일 관계를 나타냄 (여러 OrderItem이 하나의 Order에 속할 수 있음)
+	 * @JoinColumn : 외래 키 컬럼을 지정 (name 속성으로 외래 키 컬럼 이름 지정)
+	 * - orderItems 테이블에서 order_id 컬럼이 orders 테이블의 id 컬럼을 참조함
+	 * - 외래 키를 직접 사용하지 않고 객체 참조를 통해 관계를 설정함 (객체 지향적인 방식 유지!)
+	 */
+	@ManyToOne
+	@JoinColumn(name = "ORDER_ID")
+	private Order order;
+
+	@ManyToOne
+	@JoinColumn(name = "ITEM_ID")
+	private Item item;
 
 	private int orderPrice;
 
@@ -28,20 +45,20 @@ public class OrderItem {
 		this.id = id;
 	}
 
-	public Long getOrderId() {
-		return orderId;
+	public Order getOrder() {
+		return order;
 	}
 
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
+	public void setOrder(Order order) {
+		this.order = order;
 	}
 
-	public Long getItemId() {
-		return itemId;
+	public Item getItem() {
+		return item;
 	}
 
-	public void setItemId(Long itemId) {
-		this.itemId = itemId;
+	public void setItem(Item item) {
+		this.item = item;
 	}
 
 	public int getOrderPrice() {

@@ -1,6 +1,8 @@
 package jpashop.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +10,10 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 /**
@@ -40,8 +46,28 @@ public class Order {
 	@Column(name = "ORDER_ID")
 	private Long id;
 
-	@Column(name = "MEMBER_ID")
-	private Long memberId;
+	// @Column(name = "MEMBER_ID")
+	// private Long memberId;
+
+	@ManyToOne
+	@JoinColumn(name = "MEMBER_ID")
+	private Member member;
+
+	/**
+	 * @OneToOne : 일대일 관계를 나타냄 (하나의 Order가 하나의 Delivery를 가질 수 있음
+	 */
+	@OneToOne
+	@JoinColumn(name = "DELIVERY_ID")
+	private Delivery delivery;
+
+	/**
+	 * @OneToMany : 일대다 관계를 나타냄 (하나의 Order가 여러 OrderItem을 가질 수 있음)
+	 * - mappedBy 속성 : 연관 관계의 주인이 아닌 쪽에서 설정 (OrderItem 클래스의 order 필드에 의해 매핑됨)
+	 * - OrderItem 클래스에서 order 필드가 외래 키 역할을 하며, Order 클래스의 orderItems 필드와 연결됨
+	 * - 단방향 매핑으로만 설계하면 제일 좋지만 필요시 이처럼 양방향 매핑도 설정 가능
+	 */
+	@OneToMany(mappedBy = "order")
+	private List<OrderItem> orderItems = new ArrayList<>();
 
 	private LocalDateTime orderDate;
 
@@ -50,4 +76,47 @@ public class Order {
 	// - EnumType.ORDINAL : enum 상수의 순서를 DB에 저장 (가독성이 떨어짐, enum 상수가 변경되면 문제가 발생할 수 있음, 권장 X)
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status;
+
+
+	/**
+	 * OrderItem을 추가할 때 Order와의 양방향 관계를 설정하는 편의 메서드
+	 * - OrderItem의 order 필드를 this로 설정
+	 * - OrderItem을 orderItems 리스트에 추가
+	 */
+	public void addOrderItem(OrderItem orderItem) {
+		orderItems.add(orderItem);
+		orderItem.setOrder(this);
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Member getMember() {
+		return member;
+	}
+
+	public void setMember(Member member) {
+		this.member = member;
+	}
+
+	public LocalDateTime getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(LocalDateTime orderDate) {
+		this.orderDate = orderDate;
+	}
+
+	public OrderStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(OrderStatus status) {
+		this.status = status;
+	}
 }
