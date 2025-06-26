@@ -1,9 +1,12 @@
 package jpashop.domain;
 
+import static jakarta.persistence.FetchType.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -20,7 +23,7 @@ public class Category extends BaseEntity {
 
 	private String name;
 
-	@ManyToOne
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "PARENT_ID")
 	private Category parent;
 

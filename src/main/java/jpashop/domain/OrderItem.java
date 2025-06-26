@@ -1,7 +1,10 @@
 package jpashop.domain;
 
+import static jakarta.persistence.FetchType.*;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -25,11 +28,11 @@ public class OrderItem extends BaseEntity {
 	 * - orderItems 테이블에서 order_id 컬럼이 orders 테이블의 id 컬럼을 참조함
 	 * - 외래 키를 직접 사용하지 않고 객체 참조를 통해 관계를 설정함 (객체 지향적인 방식 유지!)
 	 */
-	@ManyToOne
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "ORDER_ID")
 	private Order order;
 
-	@ManyToOne
+	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "ITEM_ID")
 	private Item item;
 
