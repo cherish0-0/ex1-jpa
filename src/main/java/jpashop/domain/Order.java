@@ -54,7 +54,7 @@ public class Order extends BaseEntity {
 	// private Long memberId;
 
 	/**
-	 * fetch = LAZY : 지연 로딩을 사용 (실제로 member 사용하는 시점에 DB에서 조회, 그 전에는 프록시 객체로 조회)
+	 * fetch = LAZY : 지연 로딩을 사용 (실제로 member 사용하는 시점(엔티티의 식별자를 제외한 필드에 접근할 때)에 DB에서 조회, 그 전에는 프록시 객체로 조회)
 	 * @ManyToOne, @OneToOne은 기본값이 EAGER(즉시로딩)이므로 LAZY로 설정해야 함
 	 */
 	@ManyToOne(fetch = LAZY)
@@ -62,8 +62,13 @@ public class Order extends BaseEntity {
 	private Member member;
 
 	/**
-	 * @OneToOne : 일대일 관계를 나타냄 (하나의 Order가 하나의 Delivery를 가질 수 있음
-	 * - cascade = ALL : 영속성 전이 설정 (Order가 영속화되면 Delivery도 함께 영속화됨)
+	 * @OneToOne : 일대일 관계를 나타냄 (하나의 Order가 하나의 Delivery를 가질 수 있음)
+	 * - cascade = CascadeType.ALL : 아래 영속성 전이 옵션 4가지를 모두 적용
+	 * - cascade = PERSIST : 부모 엔티티(여기서는 Delivery) 영속화 시 자식 엔티티도 영속화
+	 * - cascade = MERGE : 부모 엔티티 병합 시 자식 엔티티도 병합 (준영속 -> 영속)
+	 * - cascade = REMOVE : 부모 엔티티 삭제 시 자식 엔티티도 삭제
+	 * - cascade = REFRESH : 부모 엔티티 새로고침 시 자식 엔티티도 새로고침 (DB에서 다시 조회 및 초기화)
+	 * - cascade = DETACH : 부모 엔티티 분리 시 자식 엔티티도 분리 (영속 -> 준영속)
 	 */
 	@OneToOne(fetch = LAZY, cascade = ALL)
 	@JoinColumn(name = "DELIVERY_ID")
