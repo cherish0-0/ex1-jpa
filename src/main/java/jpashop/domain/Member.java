@@ -1,9 +1,14 @@
 package jpashop.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Member extends BaseEntity {
@@ -14,9 +19,14 @@ public class Member extends BaseEntity {
 
 	private String name;
 
-	private String street;
+	/**
+	 * @Embedded 어노테이션을 사용하여 Address 클래스를 임베디드 타입으로 매핑함
+	 */
+	@Embedded
+	private Address address;
 
-	private String zipcode;
+	@OneToMany(mappedBy = "member")
+	private List<Order> orders = new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -34,19 +44,19 @@ public class Member extends BaseEntity {
 		this.name = name;
 	}
 
-	public String getStreet() {
-		return street;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setStreet(String street) {
-		this.street = street;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
-	public String getZipcode() {
-		return zipcode;
+	public List<Order> getOrders() {
+		return orders;
 	}
 
-	public void setZipcode(String zipcode) {
-		this.zipcode = zipcode;
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
 	}
 }
